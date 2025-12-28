@@ -1,3 +1,5 @@
+BadExplorer is a fork of Eiquidus, originally based on upstream commit b624707
+
 # eIquidus
 
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/team-exor/eiquidus?color=ffbd11&label=version)

@@ -1,0 +1,619 @@
+
+{
+  "locale": "locale/en.json",
+
+  "dbsettings": {
+  
+    "user": "MONGO_USER",
+
+    "password": "MONGO_PASSWORD",
+
+   "database": "badexplorer_DB",
+
+    "address": "127.0.0.1",
+    
+    "port": 27017
+  },
+
+  
+  "wallet": {
+   
+    "host": "127.0.0.1",
+    
+    "port": 17332,
+    
+    "username": "RPC_USER",
+    
+    "password": "RPC_PASSWORD"
+  },
+
+  
+  "webserver": {
+   
+    "port": 3001,
+    
+    "tls": {
+      
+      "enabled": false,
+      
+      "port": 443,
+      
+      "always_redirect": true,
+      
+      "cert_file": "/etc/letsencrypt/live/domain-name-here/cert.pem",
+      
+      "chain_file": "/etc/letsencrypt/live/domain-name-here/chain.pem",
+      
+      "key_file": "/etc/letsencrypt/live/domain-name-here/privkey.pem"
+    },
+          
+    "cors": {
+
+      "enabled": false,
+      
+      "corsorigin": "*"
+    }
+  },
+
+    "coin": {
+    "name": "Badtest",
+    "symbol": "BADT"
+  },
+
+    "network_history": {
+     "enabled": true,
+     "max_saved_records": 120,
+     "max_hours": 24
+  },
+
+    "shared_pages": {
+  "theme": "Exor",
+  "page_title": "eIquidus",
+  "favicons": {
+    "favicon32": "favicon-32.png",
+    "favicon180": "favicon-180.png",
+    "favicon192": "favicon-192.png"
+  },
+  "page_footer": {
+    "sticky_footer": false,
+    "bgcolor": "",
+    "footer_height_desktop": "50px",
+    "footer_height_tablet": "70px",
+    "footer_height_mobile": "70px",
+    "social_links": []
+   },
+  "logo": "/img/logo.png",
+  "date_time": {
+    "display_format": "LLL dd, yyyy HH:mm:ss ZZZZ",
+    "timezone": "utc",
+    "enable_alt_timezone_tooltips": false
+  },
+  "table_header_bgcolor": "",
+  "confirmations": 40,
+  "difficulty": "POS",
+  "show_hashrate": true,
+  "page_header": {
+    "menu": "side",
+    "sticky_header": true,
+    "bgcolor": "",
+    "home_link": "logo",
+    "home_link_logo": "/img/header-logo.png",
+    "home_link_logo_height": 50
+  }
+},
+
+  "index_page": {
+    "show_panels": true,
+    "show_nethash_chart": true,
+    "show_difficulty_chart": true,
+    "page_header": {
+     "show_img": true,
+      "show_title": true,
+      "show_last_updated": true,
+      "show_description": true
+    },
+    "transaction_table": {
+      "page_length_options": [ 10, 25, 50, 75, 100, 250, 500, 1000 ],
+      "items_per_page": 10,
+      "reload_table_seconds": 60
+    },
+    "show_extracted_by": false
+  },
+
+   "block_page": {
+     "show_panels": false,
+    "show_nethash_chart": false,
+    "show_difficulty_chart": false,
+    "page_header": {
+      "show_img": true,
+      "show_title": true,
+     "show_description": true
+    },
+    "genesis_block": "00014f36c648cdbc750f7dd28487a23cd9e0b0f95f5fccc5b5d01367e3f57469",
+    "multi_algorithm": {
+      "show_algo": false,
+      "key_name": "pow_algo"
+    },
+    "show_extracted_by": false
+  },
+
+  "transaction_page": {
+    "show_panels": false,
+    "show_nethash_chart": false,
+    "show_difficulty_chart": false,
+    "page_header": {
+      "show_img": true,
+      "show_title": true,
+      "show_description": true
+    },
+    "genesis_tx": "dd1d332ad2d8d8f49195056d482ae3c96fd2d16e9d166413b27ca7f19775644c",
+     "show_op_return": false,
+    "show_extracted_by": false
+  },
+
+  "address_page": {
+    "show_panels": false,
+    "show_nethash_chart": false,
+    "show_difficulty_chart": false,
+    "page_header": {
+      "show_img": true,
+      "show_title": true,
+      "show_description": true
+    },
+    "show_sent_received": false,
+     "enable_hidden_address_view": false,
+     "enable_unknown_address_view": false,
+     "history_table": {
+       "page_length_options": [ 10, 25, 50, 75, 100, 250, 500, 1000 ],
+      "items_per_page": 50
+    }
+  },
+
+  "error_page": {
+    "show_panels": false,
+    "show_nethash_chart": false,
+     "show_difficulty_chart": false,
+     "page_header": {
+      "show_img": true,
+       "show_title": true,
+       "show_description": true
+    }
+  },
+
+  "masternodes_page": {
+     "enabled": true,
+    "show_panels": false,
+    "show_nethash_chart": false,
+    "show_difficulty_chart": false,
+    "page_header": {
+      "show_img": true,
+      "show_title": true,
+      "show_last_updated": true,
+     "show_description": true
+    },
+    "masternode_table": {
+      "page_length_options": [ 10, 25, 50, 75, 100, 250, 500, 1000 ],
+      "items_per_page": 10
+    }
+  },
+
+  "movement_page": {
+    "enabled": true,
+    "show_panels": false,
+    "show_nethash_chart": false,
+    "show_difficulty_chart": false,
+    "page_header": {
+      "show_img": true,
+      "show_title": true,
+      "show_last_updated": true,
+       "show_description": true
+    },
+    "movement_table": {
+      "page_length_options": [ 10, 25, 50, 75, 100, 250, 500, 1000 ],
+      "items_per_page": 10,
+       "reload_table_seconds": 45,
+      "min_amount": 5000,
+      "low_warning_flag": 50000,
+      "high_warning_flag": 100000
+    }
+  },
+
+  "network_page": {
+    "enabled": true,
+    "show_panels": false,
+    "show_nethash_chart": false,
+    "show_difficulty_chart": false,
+    "page_header": {
+      "show_img": true,
+      "show_title": true,
+      "show_last_updated": true,
+      "show_description": true
+    },
+    "connections_table": {
+      "enabled": true,
+      "page_length_options": [ 10, 25, 50, 75, 100 ],
+     "items_per_page": 10,
+      "port_filter": -1,
+       "hide_protocols": [ ]
+    },
+    "addnodes_table": {
+      "enabled": true,
+      "page_length_options": [ 10, 25, 50, 75, 100 ],
+      "items_per_page": 10,
+       "port_filter": -1,
+       "hide_protocols": [ ]
+    },
+    "onetry_table": {
+       "enabled": true,
+      "page_length_options": [ 10, 25, 50, 75, 100 ],
+      "items_per_page": 10,
+      "port_filter": -1,
+       "hide_protocols": [ ]
+    }
+  },
+
+  "richlist_page": {
+    "enabled": true,
+    "show_panels": false,
+    "show_nethash_chart": false,
+    "show_difficulty_chart": false,
+    "page_header": {
+      "show_img": true,
+       "show_title": true,
+      "show_last_updated": true,
+     "show_description": true
+    },
+    "show_current_balance": true,
+    "show_received_coins": true,
+    "wealth_distribution": {
+      "show_distribution_table": true,
+      "show_distribution_chart": true,
+      "colors": [ "#e73cbd", "#00bc8c", "#3498db", "#e3ce3e", "#adb5bd", "#e74c3c" ],
+       "show_address_count": true
+    },
+   "burned_coins": {
+       "addresses": [ "EXorBurnAddressXXXXXXXXXXXXXW7cDZQ" ],
+      "include_burned_coins_in_distribution": false
+    }
+  },
+
+ "markets_page": {
+   "enabled": false,
+    "show_panels": false,
+    "show_nethash_chart": false,
+    "show_difficulty_chart": false,
+    "page_header": {
+      "show_img": true,
+      "show_title": true,
+      "show_last_updated": true,
+      "show_exchange_url": true,
+     "show_description": true
+    },
+     "show_market_dropdown_menu": true,
+    "show_market_select": true,
+     "exchanges": {
+      "altmarkets": {
+        "enabled": false,
+        "trading_pairs": [ "LTC/BTC", "LTC/ETH" ]
+      },
+      "dextrade": {
+       "enabled": false,
+        "trading_pairs": [ "LTC/BTC" ]
+      },
+      "dexomy": {
+       "enabled": false,
+        "trading_pairs": [ "BTC/USDT" ]
+      },
+       "freiexchange": {
+        "enabled": false,
+        "trading_pairs": [ "LTC/BTC" ]
+      },
+      "nonkyc": {
+        "enabled": false,
+        "trading_pairs": [ "LTC/USDT" ]
+      },
+      "poloniex": {
+       "enabled": false,
+        "trading_pairs": [ "LTC/BTC" ]
+      },
+      "xeggex": {
+       "enabled": false,
+        "trading_pairs": [ "LTC/USDT" ]
+      },
+       "yobit": {
+        "enabled": false,
+        "trading_pairs": [ "LTC/BTC" ]
+      }
+    },
+   "market_price": "AVERAGE",
+   "coingecko_currency": "BTC",
+    "coingecko_api_key": "",
+  "default_exchange": {
+      "exchange_name": "freiexchange",
+      "trading_pair": "LTC/BTC"
+    }
+  },
+
+  "api_page": {
+     "enabled": true,
+    "show_panels": false,
+    "show_nethash_chart": false,
+    "show_difficulty_chart": false,
+    "page_header": {
+      "show_img": true,
+      "show_description": true
+    },
+   "show_logo": true,
+    "sample_data": {
+     "blockindex": 64152,
+     "blockhash": "775d67da29dd6553268061f86368d06654944dd5d5c61db4c97e4c7960c11a74",
+     "txhash": "6cb3babd256de253f926f10bc8574dadf0a3e2fc8380107b81eb07c67d1e73ed",
+      "address": "ELvb8AZRgHmdsDnD1HYFwbSY4UkPhoECCW"
+    },
+    "public_apis": {
+      "rpc": {
+      "getdifficulty": {
+         "enabled": true
+        },
+       "getconnectioncount": {
+           "enabled": true
+        },
+        "getblockcount": {
+          "enabled": true
+        },
+        "getblockhash": {
+          "enabled": true
+        },
+        "getblock": {
+           "enabled": true
+        },
+        "getrawtransaction": {
+         "enabled": true
+        },
+         "getnetworkhashps": {
+         "enabled": true
+        },
+        "getvotelist": {
+           "enabled": true
+        },
+         "getmasternodecount": {
+           "enabled": true
+        }
+      },
+      "ext": {
+         "getmoneysupply": {
+           "enabled": true
+        },
+        "getdistribution": {
+          "enabled": true
+        },
+        "getaddress": {
+           "enabled": true
+        },
+         "getaddresstxs": {
+           "enabled": true,
+           "max_items_per_query": 100
+        },
+         "gettx": {
+           "enabled": true
+        },
+          "getbalance": {
+          "enabled": true
+        },
+         "getlasttxs": {
+          "enabled": true,
+          "max_items_per_query": 100,
+           "show_extracted_by": false
+        },
+        "getcurrentprice": {
+           "enabled": true
+        },
+          "getnetworkpeers": {
+           "enabled": true
+        },
+         "getbasicstats": {
+           "enabled": true
+        },
+         "getsummary": {
+           "enabled": true
+        },
+         "getmasternodelist": {
+          "enabled": true
+        },
+        "getmasternoderewards": {
+          "enabled": true
+        },
+        "getmasternoderewardstotal": {
+          "enabled": true
+        }
+      }
+    }
+  },
+
+  "claim_address_page": {
+    "enabled": true,
+    "show_panels": false,
+    "show_nethash_chart": false,
+    "show_difficulty_chart": false,
+     "page_header": {
+      "show_img": true,
+      "show_title": true,
+      "show_description": true
+    },
+     "show_header_menu": true,
+    "enable_bad_word_filter": true,
+    "enable_captcha": true
+  },
+
+  "orphans_page": {
+    "enabled": true,
+    "show_panels": false,
+    "show_nethash_chart": false,
+    "show_difficulty_chart": false,
+     "page_header": {
+      "show_img": true,
+      "show_title": true,
+      "show_last_updated": true,
+       "show_description": true
+    },
+     "orphans_table": {
+      "page_length_options": [ 10, 25, 50, 75, 100, 250, 500, 1000 ],
+      "items_per_page": 10
+    }
+  },
+
+  "sync": {
+    "block_parallel_tasks": 8,
+    "update_timeout": 10,
+    "check_timeout": 250,
+    "save_stats_after_sync_blocks": 100,
+     "show_sync_msg_when_syncing_more_than_blocks": 1000,
+    "supply": "GETBLOCKCHAININFO",
+     "batch_size": 5000,
+     "elastic_stack_size": 4096,
+    "wait_for_bulk_database_save": true,
+     "rate_limit": {
+      "peer_sync_rate_limit": 2000
+    }
+  },
+
+  "captcha": {
+    "google_recaptcha3": {
+      "enabled": false,
+       "pass_score": 0.5,
+      "site_key": "",
+      "secret_key": ""
+    },
+     "google_recaptcha2": {
+       "enabled": false,
+       "captcha_type": "checkbox",
+      "site_key": "",
+      "secret_key": ""
+    },
+     "hcaptcha": {
+      "enabled": false,
+      "site_key": "",
+      "secret_key": ""
+    }
+  },
+
+   "labels": {
+    "EJ6yc47cAZMGWHFccc9gfGbDLYuyNhP6wL": {
+      "enabled": false,
+      "label": "Development Budget",
+      "type": "success",
+       "url": ""
+    },
+    "EXorBurnAddressXXXXXXXXXXXXXW7cDZQ": {
+       "enabled": false,
+      "label": "Burn Address",
+      "type": "danger",
+       "url": ""
+    }
+  },
+
+  "default_coingecko_ids": [
+    { "symbol": "btc", "id": "bitcoin" },
+    { "symbol": "eth", "id": "ethereum" },
+    { "symbol": "usdt", "id": "tether" },
+    { "symbol": "ltc", "id": "litecoin" },
+    { "symbol": "exor", "id": "exor" }
+  ],
+
+  "api_cmds": {
+    "use_rpc": true,
+    "rpc_concurrent_tasks": 1,
+    "getnetworkhashps": "getnetworkhashps",
+    "getmininginfo": "getmininginfo",
+    "getdifficulty": "getdifficulty",
+    "getconnectioncount": "getconnectioncount",
+   "getblockcount": "getblockcount",
+    "getblockhash": "getblockhash",
+   "getblock": "getblock",
+   "getrawtransaction": "getrawtransaction",
+    "getinfo": "getinfo",
+   "getblockchaininfo": "getblockchaininfo",
+   "getpeerinfo": "getpeerinfo",
+    "gettxoutsetinfo": "gettxoutsetinfo",
+    "getvotelist": "masternodelist votes",
+      "getmasternodecount": "getmasternodecount",
+    "getmasternodelist": "listmasternodes",
+    "verifymessage": "verifymessage"
+  },
+
+  "blockchain_specific": {
+    "bitcoin": {
+       "enabled": false,
+      "api_cmds": {
+       "getdescriptorinfo": "getdescriptorinfo",
+        "deriveaddresses": "deriveaddresses"
+      }
+    },
+    "heavycoin": {
+       "enabled": false,
+      "reward_page": {
+         "enabled": true,
+         "show_panels": false,
+         "show_nethash_chart": false,
+        "show_difficulty_chart": false,
+        "page_header": {
+           "show_img": true,
+          "show_title": true,
+          "show_last_updated": true,
+          "show_description": true
+        }
+      },
+       "api_cmds": {
+        "getmaxmoney": "getmaxmoney",
+        "getmaxvote": "getmaxvote",
+         "getvote": "getvote",
+        "getphase": "getphase",
+        "getreward": "getreward",
+        "getsupply": "getsupply",
+        "getnextrewardestimate": "getnextrewardestimate",
+        "getnextrewardwhenstr": "getnextrewardwhenstr"
+      },
+       "public_apis": {
+         "getmaxmoney": {
+          "enabled": true
+        },
+        "getmaxvote": {
+          "enabled": true
+        },
+         "getvote": {
+           "enabled": true
+        },
+         "getphase": {
+           "enabled": true
+        },
+          "getreward": {
+           "enabled": true
+        },
+           "getsupply": {
+          "enabled": true
+        },
+         "getnextrewardestimate": {
+          "enabled": true
+        },
+         "getnextrewardwhenstr": {
+          "enabled": true
+        }
+      }
+    },
+     "zksnarks": {
+       "enabled": false
+    }
+  },
+
+  "plugins": {
+     "plugin_secret_code": "SJs2=&r^ScLGLgTaNm7#74=s?48zf*4+vm5S",
+    "allowed_plugins": [
+      {
+         "plugin_name": "generic-snapshots",
+          "enabled": false
+      }
+    ]
+  }
+
+
+}

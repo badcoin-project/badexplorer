@@ -60,7 +60,7 @@ function check_create_user(cb) {
   // check if the benchmark database should be checked for the correct user
   if (settings.benchmark.auto_add_user) {
     // connect to the admin database without a username/password
-    mongoose.connect(dbString).then(() => {
+    mongoose.connect(dbString, { authSource: 'admin' }).then(() => {
       // determine if the user already exists in the target database
       mongoose.connection.db
         .command({
@@ -178,7 +178,7 @@ check_create_user(function() {
   dbString = dbString + '/' + settings.benchmark.database;
 
   // connect to the benchmark database
-  mongoose.connect(dbString).then(() => {
+  mongoose.connect(dbString, { authSource: 'admin' }).then(() => {
     // delete all previous transaction records from the benchmark database
     delete_txes(function() {
       // delete all previous address records from the benchmark database

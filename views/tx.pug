@@ -14,6 +14,45 @@ block content
       }
       if (#{settings.shared_pages.page_header.page_title_image.enable_animation} == true && #{settings.transaction_page.page_header.show_img} == true)
         startRotateElement('img#header-img');
+
+        const badGlyphPanel = $('#badglyph-panel');
+        if (badGlyphPanel.length > 0) {
+          const badGlyphTxid = '#{tx.txid}';
+          const svgToDataUrl = function(markup) {
+            return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(markup);
+          };
+
+          $.getJSON('/api/v2/glyph/' + encodeURIComponent(badGlyphTxid))
+            .done(function(data) {
+              if (!data || data.status !== 'ok' || !Array.isArray(data.glyphs) || data.glyphs.length < 1)
+                return;
+
+              const glyph = data.glyphs[0] || {};
+              $('#badglyph-message').text(glyph.message || '');
+              $('#badglyph-stream').text(glyph.glyph_stream || '');
+              $('#badglyph-status').text(glyph.classification || 'unknown');
+              $('#badglyph-issuer').text(glyph.issuer_authorization || 'unchecked');
+
+              const svg = String(glyph.glyph_svg || '');
+              if (svg.indexOf('<svg') !== -1) {
+                const img = $('<img>', {
+                  alt: 'CipherGlyph sheet',
+                  src: svgToDataUrl(svg)
+                });
+                if (glyph.glyph_svg_width)
+                  img.attr('width', glyph.glyph_svg_width);
+                if (glyph.glyph_svg_height)
+                  img.attr('height', glyph.glyph_svg_height);
+                img.css({ 'max-width': '100%', 'height': 'auto' });
+                $('#badglyph-svg').empty().append(img);
+              }
+
+              badGlyphPanel.show();
+            })
+            .fail(function() {
+              badGlyphPanel.hide();
+            });
+        }
     });
   .col-xs-12.col-md-12
     if orphan != null && orphan == true
@@ -80,6 +119,22 @@ block content
               td.text-center.table-warning #{confirms}
             td.text-center
               span#timestampCol
+      #badglyph-panel.card.card-default.border-0.cardSpacer(style='display:none;')
+        .card-header
+          strong BadGlyph GLY1
+        .card-body
+          .row
+            .col-md-6
+              .fw-bold Message
+              #badglyph-message.breakWord
+              .fw-bold.mt-2 Glyph stream
+              #badglyph-stream.breakWord.small.text-muted
+              .fw-bold.mt-2 Status
+              #badglyph-status.small.text-muted
+              .fw-bold.mt-2 Issuer
+              #badglyph-issuer.small.text-muted
+            .col-md-6
+              #badglyph-svg.text-center(style='overflow:auto;')
     if tx.vout.length < 1
       .alert.alert-info.text-center(role='alert', style='margin-bottom:0;')
         strong #{settings.localization.tx_nonstandard}

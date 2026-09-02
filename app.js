@@ -762,8 +762,9 @@ app.use('/ext/getsummary', function(req, res) {
         lib.get_hashrate(function(hashrate) {
           db.get_stats(settings.coin.name, function (stats) {
             lib.get_masternodecount(function(masternodestotal) {
-              lib.get_difficulty(function(difficulty) {
-                let difficultyHybrid = '';
+              lib.get_blockchaininfo(function(blockchaininfo) {
+                lib.get_difficulty(function(difficulty) {
+                  let difficultyHybrid = '';
 
                 if (difficulty && difficulty['proof-of-work']) {
                   if (settings.shared_pages.difficulty == 'Hybrid') {
@@ -796,6 +797,11 @@ app.use('/ext/getsummary', function(req, res) {
                 res.send({
                   difficulty: (difficulty ? difficulty : '-'),
                   difficultyHybrid: difficultyHybrid,
+                  difficulty_sha256d: (blockchaininfo == null || blockchaininfo.difficulty_sha256d == null ? 0 : blockchaininfo.difficulty_sha256d),
+                  difficulty_scrypt: (blockchaininfo == null || blockchaininfo.difficulty_scrypt == null ? 0 : blockchaininfo.difficulty_scrypt),
+                  difficulty_groestl: (blockchaininfo == null || blockchaininfo.difficulty_groestl == null ? 0 : blockchaininfo.difficulty_groestl),
+                  difficulty_skein: (blockchaininfo == null || blockchaininfo.difficulty_skein == null ? 0 : blockchaininfo.difficulty_skein),
+                  difficulty_yescrypt: (blockchaininfo == null || blockchaininfo.difficulty_yescrypt == null ? 0 : blockchaininfo.difficulty_yescrypt),
                   supply: (stats == null || stats.supply == null ? 0 : stats.supply),
                   hashrate: hashrate,
                   lastPrice: (stats == null || stats.last_price == null ? 0 : stats.last_price),
@@ -804,12 +810,13 @@ app.use('/ext/getsummary', function(req, res) {
                   blockcount: (blockcount ? blockcount : '-'),
                   masternodeCountOnline: (masternodestotal && mn_enabled != 0 ? mn_enabled : '-'),
                   masternodeCountOffline: (masternodestotal && mn_total != 0 ? Math.floor(mn_total - mn_enabled) : '-')
-                });
+                                });
               });
             });
           });
         });
       });
+    });
     }
   } else
     res.end(settings.localization.method_disabled);

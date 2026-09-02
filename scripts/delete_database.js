@@ -173,7 +173,7 @@ if (lib.is_locked([deleteLockName]) == false) {
     mongoose.set('strictQuery', true);
 
     // connect to mongo database
-    mongoose.connect(dbString).then(() => {
+    mongoose.connect(dbString, { authSource: 'admin' }).then(() => {
       console.log('Database connection successful' + '\n');
 
       // prompt for database delete

@@ -200,7 +200,7 @@ function verify_collection_exists(mongoose, cb) {
   mongoose.set('strictQuery', true);
 
   // connect to mongo database
-  mongoose.connect(dbString).then(() => {
+  mongoose.connect(dbString, { authSource: 'admin' }).then(() => {
     // check if the restore will be for a single collection
     if (singleCollection != null && singleCollection != '') {
       // lookup the collection in the list of collections

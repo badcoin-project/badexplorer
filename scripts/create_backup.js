@@ -33,7 +33,7 @@ function verify_collection_exists(cb) {
     mongoose.set('strictQuery', true);
 
     // connect to mongo database
-    mongoose.connect(dbString).then(() => {
+    mongoose.connect(dbString, { authSource: 'admin' }).then(() => {
       // lookup the collection in the list of collections
       mongoose.connection.db.listCollections({ name: singleCollection }).toArray().then((collections) => {
         // check if the collection exists

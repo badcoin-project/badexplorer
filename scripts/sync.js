@@ -1212,7 +1212,9 @@ if (lib.is_locked([database]) == false) {
 
     mongoose.set('strictQuery', true);
 
-    mongoose.connect(dbString).then(() => {
+    mongoose.connect(dbString, {
+  authSource: 'admin'
+}).then(() => {
       if (database == 'index') {
         db.check_stats(settings.coin.name, function(exists) {
           if (exists == false) {
@@ -1419,8 +1421,8 @@ if (lib.is_locked([database]) == false) {
                   const newPeers = process_peer_object(peerList, {
                     address: address,
                     port: port,
-                    protocol: peer.protocol,
-                    version: peer.version,
+                    protocol: body[i].version || peer.protocol,
+                    version: (body[i].subver || peer.version || '').replace('/', '').replace('/', ''),
                     country: peer.country,
                     country_code: peer.country_code,
                     ipv6: (address && address.length > 15)

@@ -1,142 +1,294 @@
-
 {
   "locale": "locale/en.json",
-
   "dbsettings": {
-  
     "user": "MONGO_USER",
-
     "password": "MONGO_PASSWORD",
-
-   "database": "badexplorer_DB",
-
-    "address": "127.0.0.1",
-    
+    "database": "explorerdb",
+    "address": "localhost",
     "port": 27017
   },
-
-  
   "wallet": {
-   
-    "host": "127.0.0.1",
-    
-    "port": 17332,
-    
+    "host": "localhost",
+    "port": 0,
     "username": "RPC_USER",
-    
     "password": "RPC_PASSWORD"
   },
-
-  
   "webserver": {
-   
     "port": 3001,
-    
     "tls": {
-      
       "enabled": false,
-      
       "port": 443,
-      
       "always_redirect": true,
-      
       "cert_file": "/etc/letsencrypt/live/domain-name-here/cert.pem",
-      
       "chain_file": "/etc/letsencrypt/live/domain-name-here/chain.pem",
-      
       "key_file": "/etc/letsencrypt/live/domain-name-here/privkey.pem"
     },
-          
     "cors": {
-
       "enabled": false,
-      
       "corsorigin": "*"
     }
   },
-
-    "coin": {
-    "name": "Badtest",
-    "symbol": "BADT"
+  "coin": {
+    "name": "Badcoin",
+    "symbol": "BAD",
+    "max_supply": 21000000000
   },
-
-    "network_history": {
-     "enabled": true,
-     "max_saved_records": 120,
-     "max_hours": 24
+  "network_history": {
+    "enabled": true,
+    "max_saved_records": 120,
+    "max_hours": 24
   },
-
-    "shared_pages": {
-  "theme": "Exor",
-  "page_title": "eIquidus",
-  "favicons": {
-    "favicon32": "favicon-32.png",
-    "favicon180": "favicon-180.png",
-    "favicon192": "favicon-192.png"
+  "shared_pages": {
+    "theme": "Darkly",
+    "page_title": "BadExplorer",
+    "favicons": {
+      "favicon32": "favicon-32.png",
+      "favicon128": "favicon-128.png",
+      "favicon180": "favicon-180.png",
+      "favicon192": "favicon-192.png"
+    },
+    "logo": "/img/logo.png",
+    "date_time": {
+      "display_format": "LLL dd, yyyy HH:mm:ss ZZZZ",
+      "timezone": "utc",
+      "enable_alt_timezone_tooltips": false
+    },
+    "table_header_bgcolor": "",
+    "confirmations": 40,
+    "difficulty": "POW",
+    "show_hashrate": true,
+    "page_header": {
+      "menu": "side",
+      "sticky_header": true,
+      "bgcolor": "",
+      "home_link": "logo",
+      "home_link_logo": "/img/header-logo.png",
+      "home_link_logo_height": 50,
+      "panels": {
+        "network_panel": {
+          "enabled": false,
+          "display_order": 0,
+          "nethash": "getnetworkhashps",
+          "nethash_units": "G"
+        },
+        "difficulty_panel": {
+          "enabled": false,
+          "display_order": 0
+        },
+        "masternodes_panel": {
+          "enabled": true,
+          "display_order": 2
+        },
+        "coin_supply_panel": {
+          "enabled": true,
+          "display_order": 1
+        },
+        "price_panel": {
+          "enabled": false,
+          "display_order": 0
+        },
+        "usd_price_panel": {
+          "enabled": true,
+          "display_order": 4
+        },
+        "market_cap_panel": {
+          "enabled": false,
+          "display_order": 0
+        },
+        "usd_market_cap_panel": {
+          "enabled": true,
+          "display_order": 5
+        },
+        "logo_panel": {
+          "enabled": true,
+          "display_order": 3
+        },
+        "spacer_panel_1": {
+          "enabled": false,
+          "display_order": 0
+        },
+        "spacer_panel_2": {
+          "enabled": false,
+          "display_order": 0
+        },
+        "spacer_panel_3": {
+          "enabled": false,
+          "display_order": 0
+        }
+      },
+      "search": {
+        "enabled": true,
+        "position": "inside-header"
+      },
+      "page_title_image": {
+        "image_path": "/img/page-title-img.png",
+        "enable_animation": true
+      },
+      "network_charts": {
+        "nethash_chart": {
+          "enabled": true,
+          "chart_title": {
+            "enabled": false,
+            "title_text": "{coin_name} Network Hashrate History for the last {max_hours} hours\nHigh: {highest_nethash}\nCurrent: {current_nethash}\nLow: {lowest_nethash}\nBlock: {highest_block}",
+            "alignment": "center",
+            "color": "#666666",
+            "font": {
+              "family": "Arial",
+              "size": 20,
+              "weight": "bold"
+            }
+          },
+          "legend": {
+            "enabled": true,
+            "position": "bottom"
+          },
+          "bgcolor": "#ffffff",
+          "line_color": "rgba(54, 162, 235, 1)",
+          "fill_color": "rgba(54, 162, 235, 0.2)",
+          "crosshair_color": "#000000",
+          "block_line": {
+            "enabled": true,
+            "block_line_color": "rgba(0, 128, 0, 0.2)"
+          },
+          "round_decimals": 3,
+          "chart_height": 300,
+          "full_row": false,
+          "stretch_to_fit": false
+        },
+        "difficulty_chart": {
+          "enabled": true,
+          "chart_title": {
+            "enabled": false,
+            "title_text": "{coin_name} Difficulty Rate History for the last {max_hours} hours\nHigh: {highest_pos_difficulty}\nCurrent: {current_pos_difficulty}\nLow: {lowest_pos_difficulty}\nBlock: {highest_block}",
+            "alignment": "center",
+            "color": "#666666",
+            "font": {
+              "family": "Arial",
+              "size": 20,
+              "weight": "bold"
+            }
+          },
+          "legend": {
+            "enabled": true,
+            "position": "bottom"
+          },
+          "bgcolor": "#ffffff",
+          "pow_line_color": "rgba(255, 99, 132, 1)",
+          "pow_fill_color": "rgba(255, 99, 132, 0.2)",
+          "pos_line_color": "rgba(255, 161, 0, 1)",
+          "pos_fill_color": "rgba(255, 161, 0, 0.2)",
+          "crosshair_color": "#000000",
+          "block_line": {
+            "enabled": true,
+            "block_line_color": "rgba(0, 128, 0, 0.2)"
+          },
+          "round_decimals": 3,
+          "chart_height": 300,
+          "full_row": false,
+          "stretch_to_fit": false
+        },
+        "reload_chart_seconds": 60,
+        "sync_charts": true
+      }
+    },
+    "page_footer": {
+      "sticky_footer": false,
+      "bgcolor": "",
+      "footer_height_desktop": "50px",
+      "footer_height_tablet": "70px",
+      "footer_height_mobile": "70px",
+      "social_links": [
+        {
+          "enabled": false,
+          "tooltip_text": "Github",
+          "url": "",
+          "fontawesome_class": "fa-brands fa-github",
+          "image_path": ""
+        },
+        {
+          "enabled": false,
+          "tooltip_text": "Twitter",
+          "url": "",
+          "fontawesome_class": "fa-brands fa-twitter",
+          "image_path": ""
+        },
+        {
+          "enabled": false,
+          "tooltip_text": "Discord",
+          "url": "",
+          "fontawesome_class": "fa-brands fa-discord",
+          "image_path": ""
+        },
+        {
+          "enabled": false,
+          "tooltip_text": "Telegram",
+          "url": "",
+          "fontawesome_class": "fa-brands fa-telegram",
+          "image_path": ""
+        },
+        {
+          "enabled": false,
+          "tooltip_text": "Website",
+          "url": "",
+          "fontawesome_class": "",
+          "image_path": "/img/external.png"
+        },
+        {
+          "enabled": false,
+          "tooltip_text": "Coingecko",
+          "url": "",
+          "fontawesome_class": "",
+          "image_path": "/img/coingecko.png"
+        }
+      ],
+      "social_link_percent_height_desktop": 70,
+      "social_link_percent_height_tablet": 42,
+      "social_link_percent_height_mobile": 40,
+      "powered_by_text": "BadExplorer v{explorer_version}"
+    }
   },
-  "page_footer": {
-    "sticky_footer": false,
-    "bgcolor": "",
-    "footer_height_desktop": "50px",
-    "footer_height_tablet": "70px",
-    "footer_height_mobile": "70px",
-    "social_links": []
-   },
-  "logo": "/img/logo.png",
-  "date_time": {
-    "display_format": "LLL dd, yyyy HH:mm:ss ZZZZ",
-    "timezone": "utc",
-    "enable_alt_timezone_tooltips": false
-  },
-  "table_header_bgcolor": "",
-  "confirmations": 40,
-  "difficulty": "POS",
-  "show_hashrate": true,
-  "page_header": {
-    "menu": "side",
-    "sticky_header": true,
-    "bgcolor": "",
-    "home_link": "logo",
-    "home_link_logo": "/img/header-logo.png",
-    "home_link_logo_height": 50
-  }
-},
-
   "index_page": {
     "show_panels": true,
     "show_nethash_chart": true,
     "show_difficulty_chart": true,
     "page_header": {
-     "show_img": true,
+      "show_img": true,
       "show_title": true,
       "show_last_updated": true,
       "show_description": true
     },
     "transaction_table": {
-      "page_length_options": [ 10, 25, 50, 75, 100, 250, 500, 1000 ],
+      "page_length_options": [
+        10,
+        25,
+        50,
+        75,
+        100,
+        250,
+        500,
+        1000
+      ],
       "items_per_page": 10,
       "reload_table_seconds": 60
     },
     "show_extracted_by": false
   },
-
-   "block_page": {
-     "show_panels": false,
+  "block_page": {
+    "show_panels": false,
     "show_nethash_chart": false,
     "show_difficulty_chart": false,
     "page_header": {
       "show_img": true,
       "show_title": true,
-     "show_description": true
+      "show_description": true
     },
-    "genesis_block": "00014f36c648cdbc750f7dd28487a23cd9e0b0f95f5fccc5b5d01367e3f57469",
+    "genesis_block": "",
     "multi_algorithm": {
       "show_algo": false,
       "key_name": "pow_algo"
     },
     "show_extracted_by": false
   },
-
   "transaction_page": {
     "show_panels": false,
     "show_nethash_chart": false,
@@ -146,11 +298,10 @@
       "show_title": true,
       "show_description": true
     },
-    "genesis_tx": "dd1d332ad2d8d8f49195056d482ae3c96fd2d16e9d166413b27ca7f19775644c",
-     "show_op_return": false,
+    "genesis_tx": "",
+    "show_op_return": false,
     "show_extracted_by": false
   },
-
   "address_page": {
     "show_panels": false,
     "show_nethash_chart": false,
@@ -161,27 +312,34 @@
       "show_description": true
     },
     "show_sent_received": false,
-     "enable_hidden_address_view": false,
-     "enable_unknown_address_view": false,
-     "history_table": {
-       "page_length_options": [ 10, 25, 50, 75, 100, 250, 500, 1000 ],
+    "enable_hidden_address_view": false,
+    "enable_unknown_address_view": false,
+    "history_table": {
+      "page_length_options": [
+        10,
+        25,
+        50,
+        75,
+        100,
+        250,
+        500,
+        1000
+      ],
       "items_per_page": 50
     }
   },
-
   "error_page": {
     "show_panels": false,
     "show_nethash_chart": false,
-     "show_difficulty_chart": false,
-     "page_header": {
+    "show_difficulty_chart": false,
+    "page_header": {
       "show_img": true,
-       "show_title": true,
-       "show_description": true
+      "show_title": true,
+      "show_description": true
     }
   },
-
   "masternodes_page": {
-     "enabled": true,
+    "enabled": true,
     "show_panels": false,
     "show_nethash_chart": false,
     "show_difficulty_chart": false,
@@ -189,14 +347,22 @@
       "show_img": true,
       "show_title": true,
       "show_last_updated": true,
-     "show_description": true
+      "show_description": true
     },
     "masternode_table": {
-      "page_length_options": [ 10, 25, 50, 75, 100, 250, 500, 1000 ],
+      "page_length_options": [
+        10,
+        25,
+        50,
+        75,
+        100,
+        250,
+        500,
+        1000
+      ],
       "items_per_page": 10
     }
   },
-
   "movement_page": {
     "enabled": true,
     "show_panels": false,
@@ -206,18 +372,26 @@
       "show_img": true,
       "show_title": true,
       "show_last_updated": true,
-       "show_description": true
+      "show_description": true
     },
     "movement_table": {
-      "page_length_options": [ 10, 25, 50, 75, 100, 250, 500, 1000 ],
+      "page_length_options": [
+        10,
+        25,
+        50,
+        75,
+        100,
+        250,
+        500,
+        1000
+      ],
       "items_per_page": 10,
-       "reload_table_seconds": 45,
+      "reload_table_seconds": 45,
       "min_amount": 5000,
       "low_warning_flag": 50000,
       "high_warning_flag": 100000
     }
   },
-
   "network_page": {
     "enabled": true,
     "show_panels": false,
@@ -231,27 +405,44 @@
     },
     "connections_table": {
       "enabled": true,
-      "page_length_options": [ 10, 25, 50, 75, 100 ],
-     "items_per_page": 10,
+      "page_length_options": [
+        10,
+        25,
+        50,
+        75,
+        100
+      ],
+      "items_per_page": 10,
       "port_filter": -1,
-       "hide_protocols": [ ]
+      "hide_protocols": []
     },
     "addnodes_table": {
       "enabled": true,
-      "page_length_options": [ 10, 25, 50, 75, 100 ],
-      "items_per_page": 10,
-       "port_filter": -1,
-       "hide_protocols": [ ]
-    },
-    "onetry_table": {
-       "enabled": true,
-      "page_length_options": [ 10, 25, 50, 75, 100 ],
+      "page_length_options": [
+        10,
+        25,
+        50,
+        75,
+        100
+      ],
       "items_per_page": 10,
       "port_filter": -1,
-       "hide_protocols": [ ]
+      "hide_protocols": []
+    },
+    "onetry_table": {
+      "enabled": true,
+      "page_length_options": [
+        10,
+        25,
+        50,
+        75,
+        100
+      ],
+      "items_per_page": 10,
+      "port_filter": -1,
+      "hide_protocols": []
     }
   },
-
   "richlist_page": {
     "enabled": true,
     "show_panels": false,
@@ -259,26 +450,32 @@
     "show_difficulty_chart": false,
     "page_header": {
       "show_img": true,
-       "show_title": true,
+      "show_title": true,
       "show_last_updated": true,
-     "show_description": true
+      "show_description": true
     },
     "show_current_balance": true,
     "show_received_coins": true,
     "wealth_distribution": {
       "show_distribution_table": true,
       "show_distribution_chart": true,
-      "colors": [ "#e73cbd", "#00bc8c", "#3498db", "#e3ce3e", "#adb5bd", "#e74c3c" ],
-       "show_address_count": true
+      "colors": [
+        "#e73cbd",
+        "#00bc8c",
+        "#3498db",
+        "#e3ce3e",
+        "#adb5bd",
+        "#e74c3c"
+      ],
+      "show_address_count": true
     },
-   "burned_coins": {
-       "addresses": [ "EXorBurnAddressXXXXXXXXXXXXXW7cDZQ" ],
+    "burned_coins": {
+      "addresses": [],
       "include_burned_coins_in_distribution": false
     }
   },
-
- "markets_page": {
-   "enabled": false,
+  "markets_page": {
+    "enabled": false,
     "show_panels": false,
     "show_nethash_chart": false,
     "show_difficulty_chart": false,
@@ -287,76 +484,76 @@
       "show_title": true,
       "show_last_updated": true,
       "show_exchange_url": true,
-     "show_description": true
+      "show_description": true
     },
-     "show_market_dropdown_menu": true,
+    "show_market_dropdown_menu": true,
     "show_market_select": true,
-     "exchanges": {
+    "exchanges": {
       "altmarkets": {
         "enabled": false,
-        "trading_pairs": [ "LTC/BTC", "LTC/ETH" ]
+        "trading_pairs": []
       },
       "dextrade": {
-       "enabled": false,
-        "trading_pairs": [ "LTC/BTC" ]
+        "enabled": false,
+        "trading_pairs": []
       },
       "dexomy": {
-       "enabled": false,
-        "trading_pairs": [ "BTC/USDT" ]
-      },
-       "freiexchange": {
         "enabled": false,
-        "trading_pairs": [ "LTC/BTC" ]
+        "trading_pairs": []
+      },
+      "freiexchange": {
+        "enabled": false,
+        "trading_pairs": []
       },
       "nonkyc": {
         "enabled": false,
-        "trading_pairs": [ "LTC/USDT" ]
+        "trading_pairs": []
       },
       "poloniex": {
-       "enabled": false,
-        "trading_pairs": [ "LTC/BTC" ]
+        "enabled": false,
+        "trading_pairs": []
       },
       "xeggex": {
-       "enabled": false,
-        "trading_pairs": [ "LTC/USDT" ]
-      },
-       "yobit": {
         "enabled": false,
-        "trading_pairs": [ "LTC/BTC" ]
+        "trading_pairs": []
+      },
+      "yobit": {
+        "enabled": false,
+        "trading_pairs": []
       }
     },
-   "market_price": "AVERAGE",
-   "coingecko_currency": "BTC",
+    "market_price": "AVERAGE",
+    "coingecko_currency": "BTC",
     "coingecko_api_key": "",
-  "default_exchange": {
+    "default_exchange": {
       "exchange_name": "freiexchange",
-      "trading_pair": "LTC/BTC"
+      "trading_pair": ""
     }
   },
-
   "api_page": {
-     "enabled": true,
+    "enabled": true,
     "show_panels": false,
     "show_nethash_chart": false,
     "show_difficulty_chart": false,
     "page_header": {
       "show_img": true,
+      "show_title": true,
       "show_description": true
     },
-   "show_logo": true,
+    "show_logo": true,
     "sample_data": {
-     "blockindex": 64152,
-     "blockhash": "775d67da29dd6553268061f86368d06654944dd5d5c61db4c97e4c7960c11a74",
-     "txhash": "6cb3babd256de253f926f10bc8574dadf0a3e2fc8380107b81eb07c67d1e73ed",
-      "address": "ELvb8AZRgHmdsDnD1HYFwbSY4UkPhoECCW"
+      "blockindex": 0,
+      "blockhash": "",
+      "txhash": "",
+      "address": ""
     },
     "public_apis": {
       "rpc": {
-      "getdifficulty": {
-         "enabled": true
+        "getdifficulty": {
+          "enabled": true
         },
-       "getconnectioncount": {
-           "enabled": true
+        "getconnectioncount": {
+          "enabled": true
         },
         "getblockcount": {
           "enabled": true
@@ -365,59 +562,59 @@
           "enabled": true
         },
         "getblock": {
-           "enabled": true
+          "enabled": true
         },
         "getrawtransaction": {
-         "enabled": true
+          "enabled": true
         },
-         "getnetworkhashps": {
-         "enabled": true
+        "getnetworkhashps": {
+          "enabled": true
         },
         "getvotelist": {
-           "enabled": true
+          "enabled": true
         },
-         "getmasternodecount": {
-           "enabled": true
+        "getmasternodecount": {
+          "enabled": true
         }
       },
       "ext": {
-         "getmoneysupply": {
-           "enabled": true
+        "getmoneysupply": {
+          "enabled": true
         },
         "getdistribution": {
           "enabled": true
         },
         "getaddress": {
-           "enabled": true
-        },
-         "getaddresstxs": {
-           "enabled": true,
-           "max_items_per_query": 100
-        },
-         "gettx": {
-           "enabled": true
-        },
-          "getbalance": {
           "enabled": true
         },
-         "getlasttxs": {
+        "getaddresstxs": {
+          "enabled": true,
+          "max_items_per_query": 100
+        },
+        "gettx": {
+          "enabled": true
+        },
+        "getbalance": {
+          "enabled": true
+        },
+        "getlasttxs": {
           "enabled": true,
           "max_items_per_query": 100,
-           "show_extracted_by": false
+          "show_extracted_by": false
         },
         "getcurrentprice": {
-           "enabled": true
+          "enabled": true
         },
-          "getnetworkpeers": {
-           "enabled": true
+        "getnetworkpeers": {
+          "enabled": true
         },
-         "getbasicstats": {
-           "enabled": true
+        "getbasicstats": {
+          "enabled": true
         },
-         "getsummary": {
-           "enabled": true
+        "getsummary": {
+          "enabled": true
         },
-         "getmasternodelist": {
+        "getmasternodelist": {
           "enabled": true
         },
         "getmasternoderewards": {
@@ -429,97 +626,101 @@
       }
     }
   },
-
   "claim_address_page": {
     "enabled": true,
     "show_panels": false,
     "show_nethash_chart": false,
     "show_difficulty_chart": false,
-     "page_header": {
+    "page_header": {
       "show_img": true,
       "show_title": true,
       "show_description": true
     },
-     "show_header_menu": true,
+    "show_header_menu": true,
     "enable_bad_word_filter": true,
     "enable_captcha": true
   },
-
   "orphans_page": {
     "enabled": true,
     "show_panels": false,
     "show_nethash_chart": false,
     "show_difficulty_chart": false,
-     "page_header": {
+    "page_header": {
       "show_img": true,
       "show_title": true,
       "show_last_updated": true,
-       "show_description": true
+      "show_description": true
     },
-     "orphans_table": {
-      "page_length_options": [ 10, 25, 50, 75, 100, 250, 500, 1000 ],
+    "orphans_table": {
+      "page_length_options": [
+        10,
+        25,
+        50,
+        75,
+        100,
+        250,
+        500,
+        1000
+      ],
       "items_per_page": 10
     }
   },
-
   "sync": {
     "block_parallel_tasks": 8,
     "update_timeout": 10,
     "check_timeout": 250,
     "save_stats_after_sync_blocks": 100,
-     "show_sync_msg_when_syncing_more_than_blocks": 1000,
-    "supply": "GETBLOCKCHAININFO",
-     "batch_size": 5000,
-     "elastic_stack_size": 4096,
+    "show_sync_msg_when_syncing_more_than_blocks": 1000,
+    "supply": "GETINFO",
+    "batch_size": 5000,
+    "elastic_stack_size": 4096,
     "wait_for_bulk_database_save": true,
-     "rate_limit": {
+    "rate_limit": {
       "peer_sync_rate_limit": 2000
     }
   },
-
   "captcha": {
     "google_recaptcha3": {
       "enabled": false,
-       "pass_score": 0.5,
-      "site_key": "",
-      "secret_key": ""
+      "pass_score": 0.5,
+      "site_key": "CAPTCHA_SITE_KEY",
+      "secret_key": "CAPTCHA_SECRET_KEY"
     },
-     "google_recaptcha2": {
-       "enabled": false,
-       "captcha_type": "checkbox",
-      "site_key": "",
-      "secret_key": ""
-    },
-     "hcaptcha": {
+    "google_recaptcha2": {
       "enabled": false,
-      "site_key": "",
-      "secret_key": ""
+      "captcha_type": "checkbox",
+      "site_key": "CAPTCHA_SITE_KEY",
+      "secret_key": "CAPTCHA_SECRET_KEY"
+    },
+    "hcaptcha": {
+      "enabled": false,
+      "site_key": "CAPTCHA_SITE_KEY",
+      "secret_key": "CAPTCHA_SECRET_KEY"
     }
   },
-
-   "labels": {
-    "EJ6yc47cAZMGWHFccc9gfGbDLYuyNhP6wL": {
-      "enabled": false,
-      "label": "Development Budget",
-      "type": "success",
-       "url": ""
-    },
-    "EXorBurnAddressXXXXXXXXXXXXXW7cDZQ": {
-       "enabled": false,
-      "label": "Burn Address",
-      "type": "danger",
-       "url": ""
-    }
-  },
-
+  "labels": {},
   "default_coingecko_ids": [
-    { "symbol": "btc", "id": "bitcoin" },
-    { "symbol": "eth", "id": "ethereum" },
-    { "symbol": "usdt", "id": "tether" },
-    { "symbol": "ltc", "id": "litecoin" },
-    { "symbol": "exor", "id": "exor" }
+    {
+      "symbol": "btc",
+      "id": "bitcoin"
+    },
+    {
+      "symbol": "eth",
+      "id": "ethereum"
+    },
+    {
+      "symbol": "usdt",
+      "id": "tether"
+    },
+    {
+      "symbol": "ltc",
+      "id": "litecoin"
+    },
+    {
+      "symbol": "bad",
+      "id": ""
+    }
   ],
-
   "api_cmds": {
     "use_rpc": true,
     "rpc_concurrent_tasks": 1,
@@ -527,93 +728,98 @@
     "getmininginfo": "getmininginfo",
     "getdifficulty": "getdifficulty",
     "getconnectioncount": "getconnectioncount",
-   "getblockcount": "getblockcount",
+    "getblockcount": "getblockcount",
     "getblockhash": "getblockhash",
-   "getblock": "getblock",
-   "getrawtransaction": "getrawtransaction",
+    "getblock": "getblock",
+    "getrawtransaction": "getrawtransaction",
     "getinfo": "getinfo",
-   "getblockchaininfo": "getblockchaininfo",
-   "getpeerinfo": "getpeerinfo",
+    "getblockchaininfo": "getblockchaininfo",
+    "getpeerinfo": "getpeerinfo",
     "gettxoutsetinfo": "gettxoutsetinfo",
     "getvotelist": "masternodelist votes",
-      "getmasternodecount": "getmasternodecount",
+    "getmasternodecount": "getmasternodecount",
     "getmasternodelist": "listmasternodes",
     "verifymessage": "verifymessage"
   },
-
   "blockchain_specific": {
     "bitcoin": {
-       "enabled": false,
+      "enabled": false,
       "api_cmds": {
-       "getdescriptorinfo": "getdescriptorinfo",
+        "getdescriptorinfo": "getdescriptorinfo",
         "deriveaddresses": "deriveaddresses"
       }
     },
     "heavycoin": {
-       "enabled": false,
+      "enabled": false,
       "reward_page": {
-         "enabled": true,
-         "show_panels": false,
-         "show_nethash_chart": false,
+        "enabled": true,
+        "show_panels": false,
+        "show_nethash_chart": false,
         "show_difficulty_chart": false,
         "page_header": {
-           "show_img": true,
+          "show_img": true,
           "show_title": true,
           "show_last_updated": true,
           "show_description": true
         }
       },
-       "api_cmds": {
+      "api_cmds": {
         "getmaxmoney": "getmaxmoney",
         "getmaxvote": "getmaxvote",
-         "getvote": "getvote",
+        "getvote": "getvote",
         "getphase": "getphase",
         "getreward": "getreward",
         "getsupply": "getsupply",
         "getnextrewardestimate": "getnextrewardestimate",
         "getnextrewardwhenstr": "getnextrewardwhenstr"
       },
-       "public_apis": {
-         "getmaxmoney": {
+      "public_apis": {
+        "getmaxmoney": {
           "enabled": true
         },
         "getmaxvote": {
           "enabled": true
         },
-         "getvote": {
-           "enabled": true
-        },
-         "getphase": {
-           "enabled": true
-        },
-          "getreward": {
-           "enabled": true
-        },
-           "getsupply": {
+        "getvote": {
           "enabled": true
         },
-         "getnextrewardestimate": {
+        "getphase": {
           "enabled": true
         },
-         "getnextrewardwhenstr": {
+        "getreward": {
+          "enabled": true
+        },
+        "getsupply": {
+          "enabled": true
+        },
+        "getnextrewardestimate": {
+          "enabled": true
+        },
+        "getnextrewardwhenstr": {
           "enabled": true
         }
       }
     },
-     "zksnarks": {
-       "enabled": false
+    "zksnarks": {
+      "enabled": false
     }
   },
-
   "plugins": {
-     "plugin_secret_code": "SJs2=&r^ScLGLgTaNm7#74=s?48zf*4+vm5S",
+    "plugin_secret_code": "PLUGIN_SECRET",
     "allowed_plugins": [
       {
-         "plugin_name": "generic-snapshots",
-          "enabled": false
+        "plugin_name": "generic-snapshots",
+        "enabled": false
       }
     ]
+  },
+  "benchmark": {
+    "user": "BENCHMARK_MONGO_USER",
+    "password": "BENCHMARK_MONGO_PASSWORD",
+    "database": "explorer-benchmark",
+    "address": "localhost",
+    "port": 27017,
+    "block_to_sync": 5000,
+    "auto_add_user": false
   }
-
-
 }

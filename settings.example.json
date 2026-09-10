@@ -9,7 +9,7 @@
   },
   "wallet": {
     "host": "localhost",
-    "port": 0,
+    "port": 17332,
     "username": "RPC_USER",
     "password": "RPC_PASSWORD"
   },
@@ -76,7 +76,7 @@
           "display_order": 0
         },
         "masternodes_panel": {
-          "enabled": true,
+          "enabled": false,
           "display_order": 2
         },
         "coin_supply_panel": {
@@ -339,7 +339,7 @@
     }
   },
   "masternodes_page": {
-    "enabled": true,
+    "enabled": false,
     "show_panels": false,
     "show_nethash_chart": false,
     "show_difficulty_chart": false,
@@ -571,10 +571,10 @@
           "enabled": true
         },
         "getvotelist": {
-          "enabled": true
+          "enabled": false
         },
         "getmasternodecount": {
-          "enabled": true
+          "enabled": false
         }
       },
       "ext": {
@@ -615,19 +615,19 @@
           "enabled": true
         },
         "getmasternodelist": {
-          "enabled": true
+          "enabled": false
         },
         "getmasternoderewards": {
-          "enabled": true
+          "enabled": false
         },
         "getmasternoderewardstotal": {
-          "enabled": true
+          "enabled": false
         }
       }
     }
   },
   "claim_address_page": {
-    "enabled": true,
+    "enabled": false,
     "show_panels": false,
     "show_nethash_chart": false,
     "show_difficulty_chart": false,
@@ -638,7 +638,7 @@
     },
     "show_header_menu": true,
     "enable_bad_word_filter": true,
-    "enable_captcha": true
+    "enable_captcha": false
   },
   "orphans_page": {
     "enabled": true,
@@ -671,7 +671,7 @@
     "check_timeout": 250,
     "save_stats_after_sync_blocks": 100,
     "show_sync_msg_when_syncing_more_than_blocks": 1000,
-    "supply": "GETINFO",
+    "supply": "GETBLOCKCHAININFO",
     "batch_size": 5000,
     "elastic_stack_size": 4096,
     "wait_for_bulk_database_save": true,

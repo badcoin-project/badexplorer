@@ -72,6 +72,37 @@ describe('settings schema', () => {
     expect(example.coin.max_supply).toBe(21000000000);
   });
 
+  it('keeps the Badcoin starter semantics safe and explicit', () => {
+    const example = JSON.parse(fs.readFileSync(path.join(root, 'settings.example.json'), 'utf8'));
+
+    expect(example.coin.name).toBe('Badcoin');
+    expect(example.coin.symbol).toBe('BAD');
+    expect(example.coin.max_supply).toBe(21000000000);
+    expect(example.shared_pages.difficulty).toBe('POW');
+    expect(example.wallet.port).toBe(17332);
+    expect(example.sync.supply).toBe('GETBLOCKCHAININFO');
+
+    expect(example.masternodes_page.enabled).toBeFalse();
+    expect(example.shared_pages.page_header.panels.masternodes_panel.enabled).toBeFalse();
+    expect(example.claim_address_page.enabled).toBeFalse();
+    expect(example.claim_address_page.enable_captcha).toBeFalse();
+
+    expect(example.api_page.public_apis.rpc.getvotelist.enabled).toBeFalse();
+    expect(example.api_page.public_apis.rpc.getmasternodecount.enabled).toBeFalse();
+    expect(example.api_page.public_apis.ext.getmasternodelist.enabled).toBeFalse();
+    expect(example.api_page.public_apis.ext.getmasternoderewards.enabled).toBeFalse();
+    expect(example.api_page.public_apis.ext.getmasternoderewardstotal.enabled).toBeFalse();
+
+    expect(example.blockchain_specific.heavycoin.enabled).toBeFalse();
+    expect(example.blockchain_specific.zksnarks.enabled).toBeFalse();
+    Object.values(example.markets_page.exchanges).forEach((exchange) =>
+      expect(exchange.enabled).toBeFalse()
+    );
+    Object.values(example.captcha).forEach((provider) =>
+      expect(provider.enabled).toBeFalse()
+    );
+  });
+
   it('does not restore inherited credential literals', () => {
     const content = ['lib/settings.js', 'settings.json.template', 'settings.example.json']
       .map((file) => fs.readFileSync(path.join(root, file), 'utf8')).join('\n');

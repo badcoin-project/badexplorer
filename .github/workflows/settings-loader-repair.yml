@@ -1,0 +1,226 @@
+name: Temporary settings loader repair
+
+on:
+  push:
+    branches:
+      - repair/settings-loader-diagnostics
+
+permissions:
+  contents: write
+
+jobs:
+  repair-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Apply bounded repair and validate
+        shell: python
+        run: |
+          import pathlib
+          import subprocess
+
+          root = pathlib.Path.cwd()
+          settings_path = root / 'lib' / 'settings.js'
+          test_path = root / 'test' / 'settingsLoaderSpec.js'
+          workflow_path = root / '.github' / 'workflows' / 'settings-loader-repair.yml'
+
+          source = settings_path.read_text()
+          replacements = [
+              (
+                  "console.warn(`${exports.localization.missing_settings_file.replace('{1}', settings_filename.split('/')[1])}. ${exports.localization.continuing_using_defaults}`);",
+                  "const read_error_code = e && e.code ? ` (${e.code})` : '';\n      console.warn(`Unable to read settings file ${settings_filename}${read_error_code}. ${exports.localization.continuing_using_defaults}`);"
+              ),
+              (
+                  "console.warn(`${exports.localization.missing_settings_file.replace('{1}', settings_filename.split('/')[1])}. ${exports.localization.continuing_using_defaults}`);",
+                  "console.warn(`${exports.localization.missing_settings_file.replace('{1}', settings_filename)}. ${exports.localization.continuing_using_defaults}`);"
+              ),
+              (
+                  "console.error(`${exports.localization.error_processing_settings.replace('{1}', settings_filename.split('/')[1])}: ${e.message}`);",
+                  "const error_name = e && e.name ? e.name : 'Error';\n    console.error(`${exports.localization.error_processing_settings.replace('{1}', settings_filename)}: ${error_name}`);"
+              ),
+              (
+                  "json_settings = fix_deprecated_setting(json_settings, 'coin', 'coin.name');",
+                  "if (json_settings.coin != null && typeof json_settings.coin !== 'object')\n      json_settings = fix_deprecated_setting(json_settings, 'coin', 'coin.name');"
+              ),
+          ]
+
+          for old, new in replacements:
+              count = source.count(old)
+              if count != 1:
+                  raise RuntimeError(f'expected exactly one source match, got {count}: {old}')
+              source = source.replace(old, new, 1)
+
+          settings_path.write_text(source)
+
+          test_path.write_text(r'''const fs = require('fs');
+          const path = require('path');
+
+          describe('settings loader diagnostics', () => {
+            const settingsFile = path.resolve(__dirname, '..', 'lib', 'settings.js');
+            const configuredPath = '/etc/badexplorer/settings.json';
+
+            function loadWith(options = {}) {
+              const originalExistsSync = fs.existsSync;
+              const originalReadFileSync = fs.readFileSync;
+              const originalWarn = console.warn;
+              const originalError = console.error;
+              const originalExit = process.exit;
+              const warnings = [];
+              const errors = [];
+              let loaded;
+              let thrown;
+
+              fs.existsSync = function(filename) {
+                if (filename === configuredPath)
+                  return options.exists !== false;
+                return originalExistsSync.apply(fs, arguments);
+              };
+
+              fs.readFileSync = function(filename) {
+                if (filename === configuredPath) {
+                  if (options.readError)
+                    throw options.readError;
+                  return options.contents == null ? '{}' : options.contents;
+                }
+                return originalReadFileSync.apply(fs, arguments);
+              };
+
+              console.warn = (message) => warnings.push(String(message));
+              console.error = (message) => errors.push(String(message));
+              process.exit = (code) => {
+                const error = new Error(`process.exit(${code})`);
+                error.exitCode = code;
+                throw error;
+              };
+
+              try {
+                delete require.cache[require.resolve(settingsFile)];
+                loaded = require(settingsFile);
+              } catch (error) {
+                thrown = error;
+              } finally {
+                fs.existsSync = originalExistsSync;
+                fs.readFileSync = originalReadFileSync;
+                console.warn = originalWarn;
+                console.error = originalError;
+                process.exit = originalExit;
+                delete require.cache[require.resolve(settingsFile)];
+              }
+
+              return { loaded, thrown, warnings, errors };
+            }
+
+            it('reports the configured path when the settings file is missing', () => {
+              const result = loadWith({ exists: false });
+              expect(result.thrown).toBeUndefined();
+              expect(result.warnings).toContain(
+                'The /etc/badexplorer/settings.json file is missing. Continuing using defaults'
+              );
+            });
+
+            it('distinguishes a settings read error without leaking error contents', () => {
+              const readError = new Error('SECRET_CONTENT_SHOULD_NOT_LEAK');
+              readError.code = 'EACCES';
+              const result = loadWith({ readError });
+              const output = result.warnings.join('\n');
+              expect(result.thrown).toBeUndefined();
+              expect(output).toContain(
+                'Unable to read settings file /etc/badexplorer/settings.json (EACCES). Continuing using defaults'
+              );
+              expect(output).not.toContain('SECRET_CONTENT_SHOULD_NOT_LEAK');
+            });
+
+            it('reports parse errors without leaking settings contents and preserves termination', () => {
+              const result = loadWith({ contents: '{"coin":"SECRET_CONTENT_SHOULD_NOT_LEAK"' });
+              const output = result.errors.join('\n');
+              expect(result.thrown).toBeDefined();
+              expect(result.thrown.exitCode).toBe(1);
+              expect(output).toContain(
+                'There was an error processing the /etc/badexplorer/settings.json file: SyntaxError'
+              );
+              expect(output).not.toContain('SECRET_CONTENT_SHOULD_NOT_LEAK');
+            });
+
+            it('does not treat a modern object-valued coin section as a deprecated scalar', () => {
+              const result = loadWith({
+                contents: JSON.stringify({
+                  coin: { symbol: 'BAD', max_supply: 21000000000 }
+                })
+              });
+              expect(result.thrown).toBeUndefined();
+              expect(result.loaded.coin.name).toBe('Badcoin');
+              expect(result.loaded.coin.symbol).toBe('BAD');
+              expect(result.loaded.coin.max_supply).toBe(21000000000);
+              expect(result.warnings.some((message) =>
+                message.includes("Deprecated setting 'coin'")
+              )).toBeFalse();
+            });
+
+            it('continues to map a legacy scalar coin setting to coin.name', () => {
+              const result = loadWith({ contents: JSON.stringify({ coin: 'LegacyCoin' }) });
+              expect(result.thrown).toBeUndefined();
+              expect(result.loaded.coin.name).toBe('LegacyCoin');
+              expect(result.loaded.coin.symbol).toBe('BAD');
+              expect(result.loaded.coin.max_supply).toBe(21000000000);
+              expect(result.warnings.some((message) =>
+                message.includes("Deprecated setting 'coin'") && message.includes("'coin.name'")
+              )).toBeTrue();
+            });
+
+            it('keeps Badcoin-safe runtime defaults explicit', () => {
+              const result = loadWith({ exists: false });
+              expect(result.thrown).toBeUndefined();
+              expect(result.loaded.coin.name).toBe('Badcoin');
+              expect(result.loaded.coin.symbol).toBe('BAD');
+              expect(result.loaded.coin.max_supply).toBe(21000000000);
+              expect(result.loaded.shared_pages.difficulty).toBe('POW');
+            });
+          });
+          '''.replace('          ', '', 1))
+
+          def run(label, args, cwd=root):
+              print(f'===== {label} =====')
+              result = subprocess.run(args, cwd=cwd, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+              print(result.stdout)
+              print(f'{label}_rc={result.returncode}')
+              return result
+
+          install = run('npm_ci', ['npm', 'ci'])
+          if install.returncode != 0:
+              raise RuntimeError('npm ci failed')
+
+          required = [
+              run('node_check_settings', ['node', '--check', 'lib/settings.js']),
+              run('node_check_loader_test', ['node', '--check', 'test/settingsLoaderSpec.js']),
+              run('focused_loader_tests', ['node', './node_modules/jasmine/bin/jasmine.js', 'test/settingsLoaderSpec.js']),
+              run('schema_tests', ['node', './node_modules/jasmine/bin/jasmine.js', 'test/settingsSchemaSpec.js']),
+              run('diff_check', ['git', 'diff', '--check']),
+          ]
+          if any(result.returncode != 0 for result in required):
+              raise RuntimeError('required focused validation failed')
+
+          suite = run('npm_test', ['npm', 'test'])
+          if suite.returncode != 0:
+              base_dir = pathlib.Path('/tmp/badexplorer-base-parity')
+              run('base_worktree_add', ['git', 'worktree', 'add', '--detach', str(base_dir), 'fdd99ee1318de7761cf7713d57720161705dfe2b'])
+              base_install = run('base_npm_ci', ['npm', 'ci'], cwd=base_dir)
+              if base_install.returncode == 0:
+                  run('base_npm_test', ['npm', 'test'], cwd=base_dir)
+
+          workflow_path.unlink()
+          run('git_status', ['git', 'status', '--short'])
+          run('git_config_name', ['git', 'config', 'user.name', 'Zako'])
+          run('git_config_email', ['git', 'config', 'user.email', '65051353+Jegertabt@users.noreply.github.com'])
+          run('git_add', ['git', 'add', 'lib/settings.js', 'test/settingsLoaderSpec.js', '.github/workflows/settings-loader-repair.yml'])
+          commit = run('git_commit', ['git', 'commit', '-m', 'Clarify settings loader diagnostics'])
+          if commit.returncode != 0:
+              raise RuntimeError('repair commit failed')
+          pushed = run('git_push', ['git', 'push', 'origin', 'HEAD:repair/settings-loader-diagnostics'])
+          if pushed.returncode != 0:
+              raise RuntimeError('repair push failed')

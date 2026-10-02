@@ -1712,3 +1712,228 @@ div[data-overlayscrollbars-viewport="scrollbarHidden"] > .navbar-nav > li#market
     width: 12px;
   }
 }
+
+/* Badcoin shell identity */
+:root {
+  --bad-bg: #0b0b0f;
+  --bad-surface: #14141a;
+  --bad-surface-alt: #0a0a12;
+  --bad-border: rgba(255, 255, 255, 0.09);
+  --bad-border-accent: rgba(255, 0, 51, 0.40);
+  --bad-text: #f4f4f4;
+  --bad-text-muted: #a5a5a5;
+  --bad-accent: #ff1b1b;
+  --bad-accent-hover: #ff0033;
+  --bad-danger: #e74c3c;
+  --bad-success: #00bc8c;
+  --bad-warning: #f39c12;
+  --bad-radius-sm: 12px;
+  --bad-radius-md: 16px;
+  --bad-radius-lg: 18px;
+  --bad-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
+  --bad-accent-glow: 0 0 18px rgba(255, 0, 51, 0.5);
+  --bad-font-body: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --bad-font-display: "Arial Black", "Helvetica Neue", Arial, sans-serif;
+}
+
+body.badcoin-shell {
+  color: var(--bad-text);
+  background: radial-gradient(circle at top, #1b1b25 0, #050509 55%, #000 100%);
+  background-attachment: fixed;
+  font-family: var(--bad-font-body);
+}
+
+.badcoin-shell h1,
+.badcoin-shell h2,
+.badcoin-shell h3,
+.badcoin-shell h4,
+.badcoin-shell h5,
+.badcoin-shell h6,
+.badcoin-shell .navbar-brand {
+  font-family: var(--bad-font-display);
+}
+
+.badcoin-shell a:not(.btn) { color: var(--bad-text); }
+.badcoin-shell a:not(.btn):hover,
+.badcoin-shell a:not(.btn):focus { color: var(--bad-accent); }
+
+.badcoin-shell :focus-visible {
+  outline: 2px solid var(--bad-accent);
+  outline-offset: 3px;
+}
+
+.badcoin-shell-header,
+.side-header.badcoin-shell-header {
+  background: rgba(5, 5, 9, 0.96) !important;
+  border-bottom: 1px solid var(--bad-border-accent) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(10px);
+}
+
+.badcoin-shell-header .navbar-brand,
+.badcoin-shell-header .nav-link,
+.badcoin-shell-header #side-header-toggle,
+.badcoin-shell-header #search-header-button { color: var(--bad-text-muted) !important; }
+
+.badcoin-shell-header .navbar-brand:hover,
+.badcoin-shell-header .nav-link:hover,
+.badcoin-shell-header .nav-link:focus,
+.badcoin-shell-header #side-header-toggle:hover,
+.badcoin-shell-header #search-header-button:hover { color: var(--bad-accent) !important; }
+
+.badcoin-shell-header .logo-main {
+  filter: drop-shadow(0 0 8px rgba(255, 0, 51, 0.20));
+}
+
+.badcoin-shell-sidebar,
+#side-offcanvas .badcoin-shell-sidebar {
+  background: rgba(10, 10, 18, 0.98) !important;
+  border-right: 1px solid var(--bad-border) !important;
+}
+
+.badcoin-shell-sidebar .nav-link {
+  color: var(--bad-text-muted) !important;
+  border-left: 2px solid transparent !important;
+  border-radius: 0 var(--bad-radius-sm) var(--bad-radius-sm) 0;
+}
+
+.badcoin-shell-sidebar .nav-link:hover,
+.badcoin-shell-sidebar .nav-link:focus,
+.badcoin-shell-sidebar .active > .nav-link {
+  color: var(--bad-text) !important;
+  background: rgba(255, 27, 27, 0.08) !important;
+  border-left-color: var(--bad-accent) !important;
+}
+
+.badcoin-shell .search-box-custom .form-control,
+.badcoin-shell #search-row .form-control {
+  color: var(--bad-text);
+  background: var(--bad-surface-alt);
+  border-color: var(--bad-border);
+  border-radius: var(--bad-radius-sm) 0 0 var(--bad-radius-sm);
+}
+
+.badcoin-shell .search-box-custom .form-control::placeholder,
+.badcoin-shell #search-row .form-control::placeholder { color: var(--bad-text-muted); }
+
+.badcoin-shell .search-box-custom .form-control:focus,
+.badcoin-shell #search-row .form-control:focus {
+  border-color: var(--bad-accent);
+  box-shadow: 0 0 0 0.2rem rgba(255, 27, 27, 0.14);
+}
+
+.badcoin-search-submit {
+  color: #fff !important;
+  background: linear-gradient(135deg, #b40000, var(--bad-accent)) !important;
+  border-color: var(--bad-accent) !important;
+  border-radius: 0 var(--bad-radius-sm) var(--bad-radius-sm) 0 !important;
+}
+
+.badcoin-search-submit:hover,
+.badcoin-search-submit:focus {
+  background: var(--bad-accent-hover) !important;
+  border-color: var(--bad-accent-hover) !important;
+  box-shadow: var(--bad-accent-glow);
+}
+
+.badcoin-shell .card {
+  background: var(--bad-surface);
+  border-color: var(--bad-border) !important;
+  border-radius: var(--bad-radius-md);
+  box-shadow: var(--bad-shadow);
+}
+
+.badcoin-shell .card-header {
+  color: var(--bad-text);
+  background: var(--bad-surface-alt);
+  border-color: var(--bad-border) !important;
+  letter-spacing: 0.04em;
+}
+
+.badcoin-shell .card-body {
+  color: var(--bad-text);
+  background: var(--bad-surface);
+  border-color: var(--bad-border) !important;
+}
+
+.badcoin-shell table,
+.badcoin-shell .table {
+  color: var(--bad-text);
+  border-color: var(--bad-border);
+}
+
+.badcoin-shell table > thead > tr > th,
+.badcoin-shell .table > thead > tr > th {
+  color: var(--bad-text-muted);
+  background: var(--bad-surface-alt);
+  border-color: var(--bad-border) !important;
+  font-size: 0.78rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.badcoin-shell table > tbody > tr > td,
+.badcoin-shell .table > tbody > tr > td {
+  background-color: rgba(20, 20, 26, 0.92);
+  border-color: var(--bad-border) !important;
+}
+
+.badcoin-shell table > tbody > tr:hover > td,
+.badcoin-shell .table > tbody > tr:hover > td {
+  background-color: rgba(255, 27, 27, 0.045);
+}
+
+.badcoin-shell-footer,
+#footer-container.badcoin-shell-footer {
+  color: var(--bad-text-muted) !important;
+  background: rgba(5, 5, 9, 0.97) !important;
+  border-top: 1px solid var(--bad-border) !important;
+  box-shadow: 0 -8px 20px rgba(0, 0, 0, 0.22);
+}
+
+.badcoin-shell-footer .nav-link,
+.badcoin-shell-footer .badge { color: var(--bad-text-muted) !important; }
+
+.badcoin-shell-footer .nav-link:hover,
+.badcoin-shell-footer .nav-link:focus { color: var(--bad-accent) !important; }
+
+.badcoin-algorithm-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.5rem;
+  color: var(--bad-text);
+  background: var(--bad-surface-alt);
+  border: 1px solid var(--bad-border);
+  border-radius: var(--bad-radius-sm);
+  font-family: var(--bad-font-body);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+}
+
+.badcoin-algorithm-badge::before {
+  width: 0.4rem;
+  height: 0.4rem;
+  content: "";
+  background: var(--bad-accent);
+  border-radius: 50%;
+}
+
+@media (max-width: 991.98px) {
+  .badcoin-shell #side-offcanvas { background: var(--bad-surface-alt); }
+  .badcoin-shell #main-container {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .badcoin-shell .card { border-radius: var(--bad-radius-sm); }
+  .badcoin-shell #body-container {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+  .badcoin-shell-footer { font-size: 0.9rem; }
+}

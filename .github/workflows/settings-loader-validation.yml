@@ -13,10 +13,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: npm ci
+      - run: npm install --no-package-lock
       - run: node --check lib/settings.js
       - run: node --check test/settingsLoaderSpec.js
       - run: node --check test/settingsSchemaSpec.js

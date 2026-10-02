@@ -1413,7 +1413,7 @@ html(lang='en')
         - bodyContainerClasses.push('marginTop80');
       else
         - bodyContainerClasses.push('marginTop20');
-  body(class=bodyClasses)
+  body.badcoin-shell(class=bodyClasses)
     - var headerClasses = [];
     - var footerClasses = ['nav','navbar','navbar-default','d-flex','footer'];
     - var dropdownClasses = ['dropdown-menu'];
@@ -1441,7 +1441,7 @@ html(lang='en')
       - footerClasses.push('bg-primary');
       - footerClasses.push('navbar-dark');
     if settings.shared_pages.page_header.menu == 'top'
-      div#main-header.navbar(class=headerClasses)
+      div#main-header.navbar.badcoin-shell-header(class=headerClasses)
         div.navbar.navbar-expand-lg(style=settings.shared_pages.page_header.home_link == 'logo' ? 'padding-left:0;' : '')
           div.container
             .navbar-header
@@ -1549,9 +1549,9 @@ html(lang='en')
               form.form-inline.col-12.d-flex.justify-content-center(method='post', action='/search')
                 div.input-group.input-group-md.search-for(style='width:100%;')
                   input.form-control(type='text', name='search', placeholder=settings.localization.ex_search_message)
-                  button.btn.btn-success.btn-sm(type='submit') #{settings.localization.ex_search_button}
+                  button.btn.btn-sm.badcoin-search-submit(type='submit') #{settings.localization.ex_search_button}
     else
-      header#main-header-side.side-header.navbar(class=headerClasses)
+      header#main-header-side.side-header.navbar.badcoin-shell-header(class=headerClasses)
         div#inner-header-side.navbar.navbar-expand-lg
           div.container
             if settings.shared_pages.page_header.home_link == 'title'
@@ -1573,10 +1573,10 @@ html(lang='en')
               form.form-inline.col-12.d-flex.justify-content-center(method='post', action='/search')
                 div.input-group.input-group-md.search-for(style='width:100%;')
                   input.form-control(type='text', name='search', placeholder=settings.localization.ex_search_message)
-                  button.btn.btn-success.btn-sm(type='submit') #{settings.localization.ex_search_button}
+                  button.btn.btn-sm.badcoin-search-submit(type='submit') #{settings.localization.ex_search_button}
     div#body-container(class=bodyContainerClasses)
       if settings.shared_pages.page_header.menu == 'side'
-        div#side-nav-bar.navbar(class=sideBarClasses)
+        div#side-nav-bar.navbar.badcoin-shell-sidebar(class=sideBarClasses)
           nav.side-nav
             ul.navbar-nav
               li#sidebar-offcanvas-close.nav-item.text-end
@@ -1722,7 +1722,7 @@ html(lang='en')
                 .row.align-items-start
                   include ./includes/difficulty_chart.pug
           block content
-    div#footer-container(class=footerClasses, role='navigation')
+    div#footer-container.badcoin-shell-footer(class=footerClasses, role='navigation')
       .col-4.navbar-nav
         ul.nav.justify-content-left
           each social in settings.shared_pages.page_footer.social_links

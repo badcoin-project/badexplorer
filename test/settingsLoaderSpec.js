@@ -4,6 +4,7 @@ const path = require('path');
 describe('settings loader diagnostics', () => {
   const settingsFile = path.resolve(__dirname, '..', 'lib', 'settings.js');
   const configuredPath = '/etc/badexplorer/settings.json';
+  const exampleSettings = JSON.parse(fs.readFileSync(path.resolve(__dirname, '..', 'settings.example.json'), 'utf8'));
 
   function loadWith(options = {}) {
     const originalExistsSync = fs.existsSync;
@@ -89,7 +90,7 @@ describe('settings loader diagnostics', () => {
 
   it('does not treat a modern object-valued coin section as deprecated', () => {
     const result = loadWith({
-      contents: JSON.stringify({ coin: { symbol: 'BAD', max_supply: 21000000000 } })
+      contents: JSON.stringify({ ...exampleSettings, coin: { ...exampleSettings.coin } })
     });
     expect(result.thrown).toBeUndefined();
     expect(result.loaded.coin.name).toBe('Badcoin');
@@ -101,7 +102,7 @@ describe('settings loader diagnostics', () => {
   });
 
   it('maps a legacy scalar coin value to coin.name', () => {
-    const result = loadWith({ contents: JSON.stringify({ coin: 'LegacyCoin' }) });
+    const result = loadWith({ contents: JSON.stringify({ ...exampleSettings, coin: 'LegacyCoin' }) });
     expect(result.thrown).toBeUndefined();
     expect(result.loaded.coin.name).toBe('LegacyCoin');
     expect(result.loaded.coin.symbol).toBe('BAD');

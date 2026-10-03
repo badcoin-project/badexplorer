@@ -27,6 +27,15 @@ describe('Badcoin visual identity shell', () => {
     expect(styles).toContain('border: 1px solid var(--bad-border)');
   });
 
+  it('preserves readable dark-table foregrounds across Bootstrap states', () => {
+    expect(styles).toContain('--bs-table-color: var(--bad-text)');
+    expect(styles).toContain('--bs-table-striped-color: var(--bad-text)');
+    expect(styles).toContain('.badcoin-shell .table-success');
+    expect(styles).toContain('.badcoin-shell .table-warning');
+    expect(styles).toContain('.badcoin-shell .table-danger');
+    expect(styles).toContain('.badcoin-shell .text-muted');
+  });
+
   it('preserves visible keyboard focus styling', () => {
     expect(styles).toContain('.badcoin-shell :focus-visible');
     expect(styles).toContain('outline: 2px solid var(--bad-accent)');

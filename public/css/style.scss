@@ -1874,13 +1874,51 @@ body.badcoin-shell {
 
 .badcoin-shell table > tbody > tr > td,
 .badcoin-shell .table > tbody > tr > td {
+  color: var(--bad-text) !important;
   background-color: rgba(20, 20, 26, 0.92);
   border-color: var(--bad-border) !important;
+  --bs-table-color: var(--bad-text);
+  --bs-table-striped-color: var(--bad-text);
+  --bs-table-hover-color: var(--bad-text);
+}
+
+.badcoin-shell .table-striped > tbody > tr:nth-of-type(odd) > *,
+.badcoin-shell .table-striped > tbody > tr:nth-of-type(even) > * {
+  color: var(--bad-text) !important;
+  --bs-table-accent-bg: transparent;
+}
+
+.badcoin-shell .table-success,
+.badcoin-shell .table-warning,
+.badcoin-shell .table-danger,
+.badcoin-shell .table-active {
+  color: var(--bad-text) !important;
+  --bs-table-color: var(--bad-text);
+  --bs-table-striped-color: var(--bad-text);
+  --bs-table-hover-color: var(--bad-text);
+}
+
+.badcoin-shell .table-success {
+  background-color: rgba(0, 188, 140, 0.10) !important;
+}
+
+.badcoin-shell .table-warning {
+  background-color: rgba(243, 156, 18, 0.12) !important;
+}
+
+.badcoin-shell .table-danger {
+  background-color: rgba(231, 76, 60, 0.12) !important;
+}
+
+.badcoin-shell .text-muted,
+.badcoin-shell .text-secondary {
+  color: var(--bad-text-muted) !important;
 }
 
 .badcoin-shell table > tbody > tr:hover > td,
 .badcoin-shell .table > tbody > tr:hover > td {
-  background-color: rgba(255, 27, 27, 0.045);
+  color: var(--bad-text) !important;
+  background-color: rgba(255, 27, 27, 0.065);
 }
 
 .badcoin-shell-footer,

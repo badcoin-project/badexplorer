@@ -11,6 +11,7 @@ const Richlist = require('../models/richlist');
 const Stats = require('../models/stats');
 const settings = require('../lib/settings');
 const async = require('async');
+const peerSync = require('../lib/peer_sync');
 let mode = 'update';
 let database = 'index';
 let block_start = 1;
@@ -962,150 +963,11 @@ function process_peer_object(peerList, peer) {
 }
 
 function bulkUpsertPeers(peerList, cb) {
-  const batch_size = settings.sync.batch_size;
-  let index = 0;
-
-  // check if there are any peers
-  if (!Array.isArray(peerList) || peerList.length === 0) {
-    // finish without doing anything because there are no peers
-    return cb();
-  }
-
-  function processNextBatch() {
-    // check if all records were saved
-    if (index >= peerList.length) {
-      // all records were saved
-      return cb();
-    }
-
-    // get the next batch of peers
-    const batch = peerList.slice(index, index + batch_size);
-
-    // build bulkWrite operations to updateOne per document
-    const operations = batch.map(doc => ({
-      updateOne: {
-        filter: {
-          address:    doc.address,
-          port:       doc.port,
-          protocol:   doc.protocol,
-          table_type: doc.table_type,
-          ipv6:       doc.ipv6
-        },
-        update: {
-          // overwrite all fields from `doc`
-          $set: doc,
-          // reset createdAt to now (server time) on both insert and update
-          $currentDate: { createdAt: true }
-        },
-        upsert: true     // insert if no match
-      }
-    }));
-
-    // increment the index by the batch size
-    index += batch_size;
-
-    try {
-      // asynchronously write data to the peers collection
-      Peers.bulkWrite(
-        operations,
-        {
-          ordered: false,
-          writeConcern: {
-            w: settings.sync.wait_for_bulk_database_save ? 1 : 0
-          }
-        }
-      )
-      .then((result) => {
-        // process the next batch of records
-        processNextBatch();
-      }).catch((err) => {
-        console.log(err);
-
-        // process the next batch of records
-        processNextBatch();
-      });
-    } catch(err) {
-      console.log(err);
-
-      // process the next batch of records
-      processNextBatch();
-    }
-  }
-
-  // start processing records
-  processNextBatch();
+  return peerSync.bulkUpsertPeers(Peers, peerList, settings.sync, cb);
 }
 
 function removeDuplicatePeers(cb) {
-  // remove duplicate peers from the connections table_type
-  removeDuplicatePeersByType('C', settings.network_page.connections_table.enabled, settings.network_page.connections_table.port_filter, function() {
-    // remove duplicate peers from the addnodes table_type
-    removeDuplicatePeersByType('A', settings.network_page.addnodes_table.enabled, settings.network_page.addnodes_table.port_filter, function() {
-      // remove duplicate peers from the onetry table_type
-      removeDuplicatePeersByType('O', settings.network_page.onetry_table.enabled, settings.network_page.onetry_table.port_filter, function() {
-        return cb();
-      });
-    });
-  });
-}
-
-function removeDuplicatePeersByType(table_type, enabled, port_filter, cb) {
-  const normalized_port_filter = (parseInt(port_filter) || -1);
-
-  // check if this table_type is enabled and the port filter is set to -1 which indicates that duplicates should be removed
-  if (enabled && normalized_port_filter == -1) {
-    // find duplicate groups for this table_type
-    Peers.aggregate([
-      { $match: { table_type: table_type } },
-      { $sort: { createdAt: -1 } },
-      {
-        $group: {
-          _id: {
-            address: "$address",
-            protocol: "$protocol",
-            table_type: "$table_type"
-          },
-          ids: { $push: "$_id" },
-          count: { $sum: 1 }
-        }
-      },
-      { $match: { count: { $gt: 1 } } }
-    ]).then((groups) => {
-      if (!groups || !groups.length)
-        return cb();
-
-      // build delete ops: keep first id, delete the rest
-      let ops = [];
-
-      for (let i = 0; i < groups.length; i++) {
-        const ids = groups[i].ids || [];
-        const toDelete = ids.slice(1);
-
-        for (var j = 0; j < toDelete.length; j++)
-          ops.push({ deleteOne: { filter: { _id: toDelete[j] } } });
-      }
-
-      if (!ops.length)
-        return cb();
-
-      try {
-        // do one bulkWrite for this type
-        Peers.bulkWrite(ops, { ordered: false }).then((result) => {
-          return cb();
-        }).catch((err) => {
-          console.log(err);
-          return cb();
-        });
-      } catch(err) {
-        console.log(err);
-        return cb();
-      }
-    }).catch((err) => {
-      console.log(err);
-      return cb();
-    });
-  } else
-    return cb();
+  return peerSync.removeDuplicatePeers(Peers, settings.network_page, cb);
 }
 
 function update_address_count(cb) {
@@ -1391,8 +1253,8 @@ if (lib.is_locked([database]) == false) {
       } else if (database == 'peers') {
         // get peer data from the getpeerinfo wallet cmd
         lib.get_peerinfo(function(body) {
-          // check if data was returned
-          if (body != null) {
+          // getpeerinfo must return an array; null/non-array means the authoritative RPC path failed
+          if (Array.isArray(body)) {
             let peerList = [];
 
             // start an async loop to process the peer data
@@ -1423,9 +1285,9 @@ if (lib.is_locked([database]) == false) {
                     port: port,
                     protocol: body[i].version || peer.protocol,
                     version: (body[i].subver || peer.version || '').replace('/', '').replace('/', ''),
-                    country: peer.country,
-                    country_code: peer.country_code,
-                    ipv6: (address && address.length > 15)
+                    country: (typeof peer.country === 'string' ? peer.country : ''),
+                    country_code: (typeof peer.country_code === 'string' ? peer.country_code : ''),
+                    ipv6: peerSync.classifyAddress(address).ipVersion === 6
                   });
 
                   // check if any peers should be saved
@@ -1451,49 +1313,45 @@ if (lib.is_locked([database]) == false) {
                     address: address,
                     port: port,
                     protocol: body[i].version,
-                    version: body[i].subver.replace('/', '').replace('/', ''),
-                    ipv6: (address && address.length > 15)
+                    version: (body[i].subver || '').replace('/', '').replace('/', ''),
+                    ipv6: peerSync.classifyAddress(address).ipVersion === 6
                   });
                   
                   // check if any peers should be saved
                   if (newPeers != null && newPeers.length > 0) {
-                    // set up the rate limit library to limit how fast external api calls are made
-                    const rateLimitLib = require('../lib/ratelimit');
-                    const rateLimit = new rateLimitLib.RateLimit(1, settings.sync.rate_limit.peer_sync_rate_limit, false);
+                    const classification = peerSync.classifyAddress(address);
 
-                    // wait before running the external geo location api call below
-                    rateLimit.schedule(function() {
-                      // call an external geo location api to determine which country the current peer is from
-                      lib.get_geo_location(address, function(error, geo) {
-                        // check if an error was returned
-                        if (error) {
-                          console.log(error);
-                          exit(1);
-                        } else if (geo == null || typeof geo != 'object') {
-                          console.log(`Error: geolocation api returned unexpected results for ip address ${address}`);
-                          exit(1);
-                        } else {
-                          // add the geolocation data to the new peer record(s)
-                          newPeers.forEach(function (newPeer) {
-                            newPeer.country = geo.country_name;
-                            newPeer.country_code = geo.country_code;
-                          });
-                          
-                          // add peers to peer array
-                          peerList = peerList.concat(newPeers);
+                    // Local/private/non-routable addresses are valid peer records but must never be sent to an external geo service.
+                    if (!classification.publiclyRoutable) {
+                      peerSync.enrichPeerRecords(address, newPeers, lib.get_geo_location, function(geoWarning, enrichedPeers) {
+                        peerList = peerList.concat(enrichedPeers);
+                        console.log('Add new peer %s%s [%s/%s] (geo skipped: %s)', address, (port == null || port == '' ? '' : ':' + port.toString()), (i + 1).toString(), body.length.toString(), classification.scope);
+
+                        if (stopSync)
+                          loop({});
+                        else
+                          loop();
+                      });
+                    } else {
+                      // Limit external geo requests, but treat the service strictly as optional presentation enrichment.
+                      const rateLimitLib = require('../lib/ratelimit');
+                      const rateLimit = new rateLimitLib.RateLimit(1, settings.sync.rate_limit.peer_sync_rate_limit, false);
+
+                      rateLimit.schedule(function() {
+                        peerSync.enrichPeerRecords(address, newPeers, lib.get_geo_location, function(geoWarning, enrichedPeers) {
+                          if (geoWarning)
+                            console.log('Warning: geolocation unavailable for %s: %s', address, geoWarning.message || geoWarning);
+
+                          peerList = peerList.concat(enrichedPeers);
                           console.log('Add new peer %s%s [%s/%s]', address, (port == null || port == '' ? '' : ':' + port.toString()), (i + 1).toString(), body.length.toString());
 
-                          // check if the script is stopping
-                          if (stopSync) {
-                            // stop the loop
+                          if (stopSync)
                             loop({});
-                          } else {
-                            // move to next peer
+                          else
                             loop();
-                          }
-                        }
+                        });
                       });
-                    });
+                    }
                   } else {
                     console.log('Skip peer %s%s [%s/%s]', address, (port == null || port == '' ? '' : ':' + port.toString()), (i + 1).toString(), body.length.toString());
 
@@ -1510,21 +1368,33 @@ if (lib.is_locked([database]) == false) {
               });
             }, function() {
               // save the sorted list of peers to the local database
-              bulkUpsertPeers(peerList, function() {
-                // remove duplicates if necessary
-                removeDuplicatePeers(function() {
-                  // update network_last_updated value
-                  db.update_last_updated_stats(settings.coin.name, { network_last_updated: Math.floor(new Date() / 1000) }, function(cb) {
-                    // check if the script stopped prematurely
-                    if (stopSync) {
-                      console.log('Peer sync was stopped prematurely');
+              bulkUpsertPeers(peerList, function(peerSaveErr) {
+                if (peerSaveErr) {
+                  console.log('Error: Cannot persist peer data: %s', peerSaveErr.message || peerSaveErr);
+                  exit(1);
+                } else {
+                  // remove duplicates if necessary
+                  removeDuplicatePeers(function(peerCleanupErr) {
+                    if (peerCleanupErr) {
+                      console.log('Error: Cannot clean duplicate peer data: %s', peerCleanupErr.message || peerCleanupErr);
                       exit(1);
                     } else {
-                      console.log('Peer sync complete');
-                      exit(0);
+                      // update network_last_updated value
+                      db.update_last_updated_stats(settings.coin.name, { network_last_updated: Math.floor(new Date() / 1000) }, function(updateSuccess) {
+                        if (!updateSuccess) {
+                          console.log('Error: Cannot update network peer sync timestamp');
+                          exit(1);
+                        } else if (stopSync) {
+                          console.log('Peer sync was stopped prematurely');
+                          exit(1);
+                        } else {
+                          console.log('Peer sync complete');
+                          exit(0);
+                        }
+                      });
                     }
                   });
-                });
+                }
               });
             });
           } else {
